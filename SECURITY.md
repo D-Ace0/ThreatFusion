@@ -15,3 +15,5 @@ Trusted third-party plugin code can access process secrets and bypass network in
 Scores are unvalidated, source intelligence can be wrong or stale, and community associations can be benign context. Human review is required. Do not connect this heuristic directly to automated blocking, incident severity decisions, or legal attribution.
 
 To report a vulnerability in your fork, contact its maintainer privately. Do not include real secrets, private indicators, or active malicious links in public issues; use reserved fixtures and mocked responses.
+
+Case imports are local-only and do not trigger enrichment. Selected live enrichment filters non-public IOCs and full URLs lacking explicit consent. Source excerpts, filenames, and analyst notes are untrusted text and never executed. Case data and audit records remain in plaintext SQLite; exports may contain source context. Deleting a case is logical deletion and does not erase separate IOC cache/history or backups. CSV formula prefixes are neutralized. Case deletion is rejected during active enrichment. Import size limits are enforced on actual request bytes, including chunked transfer.

@@ -36,3 +36,10 @@ Heuristic scores have **not** been benchmarked, calibrated, or validated against
 ## Demo clarity correction
 
 Demo results now display prominent fictional-data labels in the dashboard, CLI, and PDF exports; historical demo entries remain explicitly simulated when the running app is in live mode. The fictional fixture score for `203.0.113.42` is not a VirusTotal reputation claim. Rechecked all 89 mocked tests after this change: 97.30% coverage.
+
+## Investigation workbench 1.1
+
+- 105 tests passed, including case extraction, deduplication, source provenance, defanged values, context-based review priorities, relationships, atomic findings during batch enrichment, privacy skips, progress, cancellation, restart recovery, CSV formula handling, PDF/JSON case exports, case authentication/deletion, and chunked input limits.
+- Browser walkthrough imported a fictional incident, extracted 9 unique IOCs from 14 source/derived-host sightings, completed 9 synthetic lookups, saved an analyst finding, and confirmed the finding survived reload.
+- The generated five-page fictional investigation PDF was rendered and visually inspected, including page transitions.
+- Source excerpts, relationships and keyword priorities are heuristic context, not a validated threat detection engine. No new live provider requests were needed to verify the investigation workflow.

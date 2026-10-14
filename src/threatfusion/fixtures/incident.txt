@@ -1,0 +1,7 @@
+# SYNTHETIC training data. No event or reputation claim is real.
+2026-10-14T10:00:00Z host=workstation-07 src=10.0.0.7 dst=203.0.113.42 action=blocked download=hxxps://suspicious[.]example/login
+2026-10-14T10:01:00Z host=workstation-07 process=powershell attachment=suspicious.example sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+2026-10-14T10:02:00Z host=workstation-08 src=10.0.0.8 dst=203.0.113.42 action=deny download=hxxps://suspicious[.]example/login
+2026-10-14T10:03:00Z host=workstation-07 Failed login from 203.0.113.42 account=training-user
+2026-10-14T10:04:00Z host=workstation-09 src=10.0.0.9 dst=2001:db8::42 action=allowed
+2026-10-14T10:05:00Z host=workstation-07 file_hash=d41d8cd98f00b204e9800998ecf8427e action=allowed

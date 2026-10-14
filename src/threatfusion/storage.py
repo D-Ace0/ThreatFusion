@@ -3,6 +3,7 @@ import time
 from contextlib import contextmanager
 from pathlib import Path
 
+from .case_models import Case, EnrichmentJob
 from .models import Analysis, ProviderResult
 
 
@@ -17,6 +18,10 @@ class Store:
                   key TEXT PRIMARY KEY, expires REAL NOT NULL, payload TEXT NOT NULL);
                 CREATE TABLE IF NOT EXISTS history (
                   id TEXT PRIMARY KEY, created TEXT NOT NULL, payload TEXT NOT NULL);
+                CREATE TABLE IF NOT EXISTS cases (
+                  id TEXT PRIMARY KEY, updated TEXT NOT NULL, payload TEXT NOT NULL);
+                CREATE TABLE IF NOT EXISTS jobs (
+                  id TEXT PRIMARY KEY, case_id TEXT NOT NULL, payload TEXT NOT NULL);
             """)
 
     @contextmanager
@@ -74,3 +79,66 @@ class Store:
         with self.connect() as db:
             db.execute("PRAGMA wal_checkpoint(TRUNCATE)")
             db.execute("VACUUM")
+
+    def save_case(self, case: Case):
+        with self.connect() as db:
+            db.execute(
+                "INSERT INTO cases VALUES (?,?,?)",
+                (case.id, case.updated_at.isoformat(), case.model_dump_json()),
+            )
+
+    def get_case(self, identifier: str) -> Case | None:
+        with self.connect() as db:
+            row = db.execute("SELECT payload FROM cases WHERE id=?", (identifier,)).fetchone()
+        return Case.model_validate_json(row[0]) if row else None
+
+    def update_case(self, identifier, update):
+        with self.connect() as db:
+            db.execute("BEGIN IMMEDIATE")
+            row = db.execute("SELECT payload FROM cases WHERE id=?", (identifier,)).fetchone()
+            if not row:
+                raise KeyError("Case not found")
+            case = Case.model_validate_json(row[0])
+            update(case)
+            db.execute(
+                "UPDATE cases SET updated=?, payload=? WHERE id=?",
+                (case.updated_at.isoformat(), case.model_dump_json(), identifier),
+            )
+        return case
+
+    def cases(self, limit=20, offset=0):
+        with self.connect() as db:
+            rows = db.execute(
+                "SELECT payload FROM cases ORDER BY updated DESC LIMIT ? OFFSET ?", (limit, offset)
+            ).fetchall()
+        return [Case.model_validate_json(row[0]) for row in rows]
+
+    def delete_case(self, identifier):
+        with self.connect() as db:
+            db.execute("DELETE FROM cases WHERE id=?", (identifier,))
+            db.execute("DELETE FROM jobs WHERE case_id=?", (identifier,))
+
+    def save_job(self, job: EnrichmentJob):
+        with self.connect() as db:
+            db.execute(
+                "INSERT OR REPLACE INTO jobs VALUES (?,?,?)",
+                (job.id, job.case_id, job.model_dump_json()),
+            )
+
+    def get_job(self, identifier):
+        with self.connect() as db:
+            row = db.execute("SELECT payload FROM jobs WHERE id=?", (identifier,)).fetchone()
+        return EnrichmentJob.model_validate_json(row[0]) if row else None
+
+    def recover_jobs(self):
+        with self.connect() as db:
+            for identifier, payload in db.execute("SELECT id,payload FROM jobs").fetchall():
+                job = EnrichmentJob.model_validate_json(payload)
+                if job.status in ("queued", "running"):
+                    job.status = "interrupted"
+                    job.message = (
+                        "Server restarted; unfinished lookups were not resumed automatically"
+                    )
+                    db.execute(
+                        "UPDATE jobs SET payload=? WHERE id=?", (job.model_dump_json(), identifier)
+                    )

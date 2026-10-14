@@ -50,3 +50,9 @@ Each provider runs independently; failure becomes a status result. Cancellation 
 6. Mocked integration coverage, CI, installation and security documentation.
 
 Future work should prioritize evaluation against labeled datasets, calibrated uncertainty, domain-resolution policy with explicit consent, tenant isolation, and deployment threat modeling before automated response decisions.
+
+## Investigation layer (1.1)
+
+`extraction.py` converts bounded local text into `Case` objects with source references and relationships. `triage.py` supplies explainable workflow priorities independently of provider risk. `cases.py` owns background enrichment jobs and privacy-filtered selections. SQLite case mutations use BEGIN IMMEDIATE to avoid lost findings during enrichment. Jobs persist progress, retain partial results on cancellation, and are marked interrupted after restart without automatic external retries. `case_reports.py` exports source-linked findings as JSON/CSV/PDF. The case workbench is `/`; the original lookup UI is `/lookup`.
+
+Tags and edges are intentionally narrow: same-line association is not proof of a network connection, and a local keyword is not proof of maliciousness. Source excerpts and analyst notes are sensitive local data. The existing optional API key applies to all case and job endpoints.

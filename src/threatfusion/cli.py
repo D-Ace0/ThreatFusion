@@ -136,5 +136,68 @@ def serve(host: str = "127.0.0.1", port: int = typer.Option(8000, min=1, max=655
     uvicorn.run(create_app(settings), host=host, port=port, access_log=False)
 
 
+@app.command("case-import")
+def import_case_file(source: Path, title: str = "Imported investigation"):
+    """Extract and prioritize a local text file without external queries."""
+    from rich.text import Text
+
+    from .extraction import extract_case
+    from .triage import prioritize
+
+    try:
+        if source.stat().st_size > 800_000:
+            raise ValueError("Text file too large; limit input to 200,000 characters")
+        case = prioritize(
+            extract_case(title, source.name[:120], source.read_text(encoding="utf-8-sig"))
+        )
+        Store(Settings().db_path).save_case(case)
+    except (ValueError, OSError) as exc:
+        console.print(str(exc), markup=False)
+        raise typer.Exit(2) from exc
+    console.print(f"Local case saved: {case.id}", markup=False)
+    table = Table("Indicator", "Sightings", "Review priority", "Source lines")
+    for item in case.indicators:
+        table.add_row(
+            Text(item.ioc.value),
+            str(item.occurrences),
+            item.priority,
+            ", ".join(str(o.line) for o in item.observations),
+        )
+    console.print(table)
+    console.print(
+        "Import made no external lookups. Open the dashboard to review connections and record findings."
+    )
+
+
+@app.command("case-list")
+def list_case_files(limit: int = typer.Option(20, min=1, max=100)):
+    """List saved investigations."""
+    for case in Store(Settings().db_path).cases(limit):
+        console.print(f"{case.id} | {case.title} | {len(case.indicators)} indicators", markup=False)
+
+
+@app.command("case-report")
+def export_case_file(case_id: str, output: Path):
+    """Export a saved case as JSON, CSV, or an investigation PDF brief."""
+    from .case_reports import case_pdf, csv_report
+
+    case = Store(Settings().db_path).get_case(case_id)
+    if not case:
+        raise typer.BadParameter("Case not found")
+    format = output.suffix.lower()
+    if format not in (".json", ".csv", ".pdf"):
+        raise typer.BadParameter("Output must end in .json, .csv or .pdf")
+    payload = (
+        case_pdf(case)
+        if format == ".pdf"
+        else csv_report(case)
+        if format == ".csv"
+        else case.model_dump_json(indent=2).encode()
+    )
+    output.parent.mkdir(parents=True, exist_ok=True)
+    output.write_bytes(payload)
+    console.print(f"Case brief saved: {output}", markup=False)
+
+
 if __name__ == "__main__":
     app()

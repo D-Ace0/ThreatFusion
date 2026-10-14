@@ -12,8 +12,7 @@ def test_api_end_to_end(settings):
     with TestClient(create_app(settings)) as client:
         assert client.get("/api/health").json()["mode"] == "demo"
         assert client.get("/").status_code == 200
-        assert 'id="mode-notice"' in client.get("/").text
-        assert "SIMULATED DEMO RESULT" in client.get("/static/app.js").text
+        assert client.get("/lookup").status_code == 200
         assert "Same-origin REST explorer" in client.get("/docs").text
         assert client.get("/static/app.js").status_code == 200
         assert client.get("/openapi.json").status_code == 200

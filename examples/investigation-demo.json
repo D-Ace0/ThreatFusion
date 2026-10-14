@@ -1,0 +1,1187 @@
+{
+  "id": "002a5612-3cd6-4016-b400-9bc27d60359b",
+  "title": "Suspicious workstation activity (training)",
+  "source_name": "synthetic-incident.log",
+  "created_at": "2026-10-14T20:20:37.636391Z",
+  "updated_at": "2026-10-14T20:21:33.273022Z",
+  "synthetic": true,
+  "line_count": 7,
+  "input_sha256": "f8c8f406c66a9410b268a4df3c86a73f7ff2fdf7537b38f0e7b00fdfd056b906",
+  "indicators": [
+    {
+      "id": "17af1cf3d1b5332c5334",
+      "ioc": {
+        "value": "203.0.113.42",
+        "type": "ipv4",
+        "public": false
+      },
+      "occurrences": 3,
+      "observations": [
+        {
+          "line": 2,
+          "excerpt": "2026-10-14T10:00:00Z host=workstation-07 src=10.0.0.7 dst=203.0.113.42 action=blocked download=hxxps://suspicious[.]example/login",
+          "tags": [
+            "blocked event",
+            "download context"
+          ]
+        },
+        {
+          "line": 4,
+          "excerpt": "2026-10-14T10:02:00Z host=workstation-08 src=10.0.0.8 dst=203.0.113.42 action=deny download=hxxps://suspicious[.]example/login",
+          "tags": [
+            "blocked event",
+            "download context"
+          ]
+        },
+        {
+          "line": 5,
+          "excerpt": "2026-10-14T10:03:00Z host=workstation-07 Failed login from 203.0.113.42 account=training-user",
+          "tags": [
+            "authentication failure"
+          ]
+        }
+      ],
+      "tags": [
+        "authentication failure",
+        "blocked event",
+        "download context"
+      ],
+      "analysis": {
+        "id": "d6506ec1-88f5-44bf-983a-1720ef87ee3e",
+        "ioc": {
+          "value": "203.0.113.42",
+          "type": "ipv4",
+          "public": false
+        },
+        "mode": "demo",
+        "created_at": "2026-10-14T20:20:42.909958Z",
+        "results": [
+          {
+            "source": "virustotal",
+            "status": "ok",
+            "retrieved_at": "2026-10-14T20:20:42.879309Z",
+            "evidence": [
+              {
+                "source": "virustotal",
+                "metric": "detections",
+                "value": 48.0,
+                "total": 72,
+                "description": "SYNTHETIC demo evidence; not real provider intelligence",
+                "source_url": "fixture://demo/flagged",
+                "retrieved_at": "2026-10-14T20:20:42.879309Z",
+                "observed_at": "2026-10-12T20:20:42.879309Z"
+              }
+            ],
+            "message": "SYNTHETIC demo",
+            "attempts": 0,
+            "retry_after": null,
+            "cached": false
+          },
+          {
+            "source": "abuseipdb",
+            "status": "ok",
+            "retrieved_at": "2026-10-14T20:20:42.861147Z",
+            "evidence": [
+              {
+                "source": "abuseipdb",
+                "metric": "abuse_confidence",
+                "value": 85.0,
+                "total": null,
+                "description": "SYNTHETIC demo evidence; not real provider intelligence",
+                "source_url": "fixture://demo/flagged",
+                "retrieved_at": "2026-10-14T20:20:42.861147Z",
+                "observed_at": "2026-10-12T20:20:42.861147Z"
+              }
+            ],
+            "message": "SYNTHETIC demo",
+            "attempts": 0,
+            "retry_after": null,
+            "cached": false
+          },
+          {
+            "source": "otx",
+            "status": "ok",
+            "retrieved_at": "2026-10-14T20:20:42.879309Z",
+            "evidence": [
+              {
+                "source": "otx",
+                "metric": "pulse_count",
+                "value": 7.0,
+                "total": null,
+                "description": "SYNTHETIC demo evidence; not real provider intelligence",
+                "source_url": "fixture://demo/flagged",
+                "retrieved_at": "2026-10-14T20:20:42.879309Z",
+                "observed_at": "2026-10-12T20:20:42.878299Z"
+              }
+            ],
+            "message": "SYNTHETIC demo",
+            "attempts": 0,
+            "retry_after": null,
+            "cached": false
+          }
+        ],
+        "score": {
+          "risk": 76,
+          "label": "high",
+          "confidence": 99,
+          "coverage": 100,
+          "freshness": 98,
+          "contributions": [
+            {
+              "source": "virustotal",
+              "points": 40.0,
+              "reason": "48/72 malicious engines x 60-point ceiling"
+            },
+            {
+              "source": "abuseipdb",
+              "points": 25.5,
+              "reason": "Provider abuse score 85/100 x 30-point ceiling"
+            },
+            {
+              "source": "otx",
+              "points": 10.0,
+              "reason": "7 community pulses x 2, capped at 10"
+            }
+          ],
+          "methodology": "heuristic-v1; unvalidated triage aid, not a probability or verdict"
+        }
+      },
+      "disposition": "investigate",
+      "note": "Training finding: repeated blocked download events across two workstations plus a failed login. Verify endpoint process trees and whether any related connections were allowed. This is fictional evidence, not a real incident.",
+      "priority": "high",
+      "reasons": [
+        "Non-public/reserved indicator: retained for local context; external lookup blocked",
+        "Local source contains: authentication failure, blocked event, download context; keywords alone are not proof",
+        "Appears 3 times in the imported text; repetition is not maliciousness",
+        "Multiple local activity types across repeated sightings: review the combined sequence first",
+        "SIMULATED fixture signals: abuseipdb, otx, virustotal",
+        "Connected to 4 other case indicators by source context"
+      ],
+      "next_steps": [
+        "Check account, host, and authentication timestamps; distinguish user error from repeated abuse",
+        "Identify the originating message/process and downloaded file hash using existing logs",
+        "Confirm the control blocked the event and check whether any related activity was allowed"
+      ]
+    },
+    {
+      "id": "dec552e3d201c2324bb5",
+      "ioc": {
+        "value": "suspicious.example",
+        "type": "domain",
+        "public": false
+      },
+      "occurrences": 3,
+      "observations": [
+        {
+          "line": 2,
+          "excerpt": "2026-10-14T10:00:00Z host=workstation-07 src=10.0.0.7 dst=203.0.113.42 action=blocked download=hxxps://suspicious[.]example/login",
+          "tags": [
+            "blocked event",
+            "download context"
+          ]
+        },
+        {
+          "line": 3,
+          "excerpt": "2026-10-14T10:01:00Z host=workstation-07 process=powershell attachment=suspicious.example sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "tags": [
+            "download context",
+            "execution context"
+          ]
+        },
+        {
+          "line": 4,
+          "excerpt": "2026-10-14T10:02:00Z host=workstation-08 src=10.0.0.8 dst=203.0.113.42 action=deny download=hxxps://suspicious[.]example/login",
+          "tags": [
+            "blocked event",
+            "download context"
+          ]
+        }
+      ],
+      "tags": [
+        "blocked event",
+        "download context",
+        "execution context"
+      ],
+      "analysis": {
+        "id": "fa21d94a-bed9-46cd-a181-0da2976993c3",
+        "ioc": {
+          "value": "suspicious.example",
+          "type": "domain",
+          "public": false
+        },
+        "mode": "demo",
+        "created_at": "2026-10-14T20:20:42.974655Z",
+        "results": [
+          {
+            "source": "virustotal",
+            "status": "ok",
+            "retrieved_at": "2026-10-14T20:20:42.950427Z",
+            "evidence": [
+              {
+                "source": "virustotal",
+                "metric": "detections",
+                "value": 48.0,
+                "total": 72,
+                "description": "SYNTHETIC demo evidence; not real provider intelligence",
+                "source_url": "fixture://demo/flagged",
+                "retrieved_at": "2026-10-14T20:20:42.950427Z",
+                "observed_at": "2026-10-12T20:20:42.950427Z"
+              }
+            ],
+            "message": "SYNTHETIC demo",
+            "attempts": 0,
+            "retry_after": null,
+            "cached": false
+          },
+          {
+            "source": "abuseipdb",
+            "status": "unsupported",
+            "retrieved_at": "2026-10-14T20:20:42.944301Z",
+            "evidence": [],
+            "message": "",
+            "attempts": 0,
+            "retry_after": null,
+            "cached": false
+          },
+          {
+            "source": "otx",
+            "status": "ok",
+            "retrieved_at": "2026-10-14T20:20:42.966558Z",
+            "evidence": [
+              {
+                "source": "otx",
+                "metric": "pulse_count",
+                "value": 7.0,
+                "total": null,
+                "description": "SYNTHETIC demo evidence; not real provider intelligence",
+                "source_url": "fixture://demo/flagged",
+                "retrieved_at": "2026-10-14T20:20:42.966558Z",
+                "observed_at": "2026-10-12T20:20:42.966558Z"
+              }
+            ],
+            "message": "SYNTHETIC demo",
+            "attempts": 0,
+            "retry_after": null,
+            "cached": false
+          }
+        ],
+        "score": {
+          "risk": 50,
+          "label": "elevated",
+          "confidence": 99,
+          "coverage": 100,
+          "freshness": 98,
+          "contributions": [
+            {
+              "source": "virustotal",
+              "points": 40.0,
+              "reason": "48/72 malicious engines x 60-point ceiling"
+            },
+            {
+              "source": "otx",
+              "points": 10.0,
+              "reason": "7 community pulses x 2, capped at 10"
+            }
+          ],
+          "methodology": "heuristic-v1; unvalidated triage aid, not a probability or verdict"
+        }
+      },
+      "disposition": "unreviewed",
+      "note": "",
+      "priority": "high",
+      "reasons": [
+        "Non-public/reserved indicator: retained for local context; external lookup blocked",
+        "Local source contains: blocked event, download context, execution context; keywords alone are not proof",
+        "Appears 3 times in the imported text; repetition is not maliciousness",
+        "Multiple local activity types across repeated sightings: review the combined sequence first",
+        "SIMULATED fixture signals: otx, virustotal",
+        "Connected to 5 other case indicators by source context"
+      ],
+      "next_steps": [
+        "Review the process tree and command line in endpoint telemetry; do not execute the sample",
+        "Identify the originating message/process and downloaded file hash using existing logs",
+        "Confirm the control blocked the event and check whether any related activity was allowed"
+      ]
+    },
+    {
+      "id": "c9e87fb724774d7ec4d7",
+      "ioc": {
+        "value": "https://suspicious.example/login",
+        "type": "url",
+        "public": false
+      },
+      "occurrences": 2,
+      "observations": [
+        {
+          "line": 2,
+          "excerpt": "2026-10-14T10:00:00Z host=workstation-07 src=10.0.0.7 dst=203.0.113.42 action=blocked download=hxxps://suspicious[.]example/login",
+          "tags": [
+            "blocked event",
+            "download context"
+          ]
+        },
+        {
+          "line": 4,
+          "excerpt": "2026-10-14T10:02:00Z host=workstation-08 src=10.0.0.8 dst=203.0.113.42 action=deny download=hxxps://suspicious[.]example/login",
+          "tags": [
+            "blocked event",
+            "download context"
+          ]
+        }
+      ],
+      "tags": [
+        "blocked event",
+        "download context"
+      ],
+      "analysis": {
+        "id": "3121c185-4651-418c-8cfd-86ab8355be7c",
+        "ioc": {
+          "value": "https://suspicious.example/login",
+          "type": "url",
+          "public": false
+        },
+        "mode": "demo",
+        "created_at": "2026-10-14T20:20:43.025742Z",
+        "results": [
+          {
+            "source": "virustotal",
+            "status": "ok",
+            "retrieved_at": "2026-10-14T20:20:43.004212Z",
+            "evidence": [
+              {
+                "source": "virustotal",
+                "metric": "detections",
+                "value": 48.0,
+                "total": 72,
+                "description": "SYNTHETIC demo evidence; not real provider intelligence",
+                "source_url": "fixture://demo/flagged",
+                "retrieved_at": "2026-10-14T20:20:43.003211Z",
+                "observed_at": "2026-10-12T20:20:43.003211Z"
+              }
+            ],
+            "message": "SYNTHETIC demo",
+            "attempts": 0,
+            "retry_after": null,
+            "cached": false
+          },
+          {
+            "source": "abuseipdb",
+            "status": "unsupported",
+            "retrieved_at": "2026-10-14T20:20:43.000218Z",
+            "evidence": [],
+            "message": "",
+            "attempts": 0,
+            "retry_after": null,
+            "cached": false
+          },
+          {
+            "source": "otx",
+            "status": "ok",
+            "retrieved_at": "2026-10-14T20:20:43.009214Z",
+            "evidence": [
+              {
+                "source": "otx",
+                "metric": "pulse_count",
+                "value": 7.0,
+                "total": null,
+                "description": "SYNTHETIC demo evidence; not real provider intelligence",
+                "source_url": "fixture://demo/flagged",
+                "retrieved_at": "2026-10-14T20:20:43.009214Z",
+                "observed_at": "2026-10-12T20:20:43.009214Z"
+              }
+            ],
+            "message": "SYNTHETIC demo",
+            "attempts": 0,
+            "retry_after": null,
+            "cached": false
+          }
+        ],
+        "score": {
+          "risk": 50,
+          "label": "elevated",
+          "confidence": 99,
+          "coverage": 100,
+          "freshness": 98,
+          "contributions": [
+            {
+              "source": "virustotal",
+              "points": 40.0,
+              "reason": "48/72 malicious engines x 60-point ceiling"
+            },
+            {
+              "source": "otx",
+              "points": 10.0,
+              "reason": "7 community pulses x 2, capped at 10"
+            }
+          ],
+          "methodology": "heuristic-v1; unvalidated triage aid, not a probability or verdict"
+        }
+      },
+      "disposition": "unreviewed",
+      "note": "",
+      "priority": "high",
+      "reasons": [
+        "Non-public/reserved indicator: retained for local context; external lookup blocked",
+        "Local source contains: blocked event, download context; keywords alone are not proof",
+        "Appears 2 times in the imported text; repetition is not maliciousness",
+        "Multiple local activity types across repeated sightings: review the combined sequence first",
+        "SIMULATED fixture signals: otx, virustotal",
+        "Connected to 4 other case indicators by source context"
+      ],
+      "next_steps": [
+        "Identify the originating message/process and downloaded file hash using existing logs",
+        "Confirm the control blocked the event and check whether any related activity was allowed",
+        "Review URL text locally; enrich the hostname separately if full-URL disclosure is inappropriate"
+      ]
+    },
+    {
+      "id": "2d5a46998b37e42f787f",
+      "ioc": {
+        "value": "2001:db8::42",
+        "type": "ipv6",
+        "public": false
+      },
+      "occurrences": 1,
+      "observations": [
+        {
+          "line": 6,
+          "excerpt": "2026-10-14T10:04:00Z host=workstation-09 src=10.0.0.9 dst=2001:db8::42 action=allowed",
+          "tags": []
+        }
+      ],
+      "tags": [],
+      "analysis": {
+        "id": "0766fb14-095e-4b9c-9f9d-173a7c4d9de2",
+        "ioc": {
+          "value": "2001:db8::42",
+          "type": "ipv6",
+          "public": false
+        },
+        "mode": "demo",
+        "created_at": "2026-10-14T20:20:43.397548Z",
+        "results": [
+          {
+            "source": "virustotal",
+            "status": "ok",
+            "retrieved_at": "2026-10-14T20:20:43.366255Z",
+            "evidence": [
+              {
+                "source": "virustotal",
+                "metric": "detections",
+                "value": 12.0,
+                "total": 72,
+                "description": "SYNTHETIC demo evidence; not real provider intelligence",
+                "source_url": "fixture://demo/stale",
+                "retrieved_at": "2026-10-14T20:20:43.366255Z",
+                "observed_at": "2026-06-16T20:20:43.366255Z"
+              }
+            ],
+            "message": "SYNTHETIC demo",
+            "attempts": 0,
+            "retry_after": null,
+            "cached": false
+          },
+          {
+            "source": "abuseipdb",
+            "status": "ok",
+            "retrieved_at": "2026-10-14T20:20:43.367261Z",
+            "evidence": [
+              {
+                "source": "abuseipdb",
+                "metric": "abuse_confidence",
+                "value": 50.0,
+                "total": null,
+                "description": "SYNTHETIC demo evidence; not real provider intelligence",
+                "source_url": "fixture://demo/stale",
+                "retrieved_at": "2026-10-14T20:20:43.367261Z",
+                "observed_at": "2026-06-16T20:20:43.367261Z"
+              }
+            ],
+            "message": "SYNTHETIC demo",
+            "attempts": 0,
+            "retry_after": null,
+            "cached": false
+          },
+          {
+            "source": "otx",
+            "status": "ok",
+            "retrieved_at": "2026-10-14T20:20:43.368255Z",
+            "evidence": [
+              {
+                "source": "otx",
+                "metric": "pulse_count",
+                "value": 3.0,
+                "total": null,
+                "description": "SYNTHETIC demo evidence; not real provider intelligence",
+                "source_url": "fixture://demo/stale",
+                "retrieved_at": "2026-10-14T20:20:43.368255Z",
+                "observed_at": "2026-06-16T20:20:43.368255Z"
+              }
+            ],
+            "message": "SYNTHETIC demo",
+            "attempts": 0,
+            "retry_after": null,
+            "cached": false
+          }
+        ],
+        "score": {
+          "risk": 31,
+          "label": "elevated",
+          "confidence": 40,
+          "coverage": 100,
+          "freshness": 0,
+          "contributions": [
+            {
+              "source": "virustotal",
+              "points": 10.0,
+              "reason": "12/72 malicious engines x 60-point ceiling"
+            },
+            {
+              "source": "abuseipdb",
+              "points": 15.0,
+              "reason": "Provider abuse score 50/100 x 30-point ceiling"
+            },
+            {
+              "source": "otx",
+              "points": 6.0,
+              "reason": "3 community pulses x 2, capped at 10"
+            }
+          ],
+          "methodology": "heuristic-v1; unvalidated triage aid, not a probability or verdict"
+        }
+      },
+      "disposition": "unreviewed",
+      "note": "",
+      "priority": "high",
+      "reasons": [
+        "Non-public/reserved indicator: retained for local context; external lookup blocked",
+        "SIMULATED fixture signals: abuseipdb, otx, virustotal",
+        "Connected to 1 other case indicators by source context"
+      ],
+      "next_steps": [
+        "Compare the source line with the asset owner's expected activity and record your finding"
+      ]
+    },
+    {
+      "id": "130e4daba9786013f48d",
+      "ioc": {
+        "value": "10.0.0.7",
+        "type": "ipv4",
+        "public": false
+      },
+      "occurrences": 1,
+      "observations": [
+        {
+          "line": 2,
+          "excerpt": "2026-10-14T10:00:00Z host=workstation-07 src=10.0.0.7 dst=203.0.113.42 action=blocked download=hxxps://suspicious[.]example/login",
+          "tags": [
+            "blocked event",
+            "download context"
+          ]
+        }
+      ],
+      "tags": [
+        "blocked event",
+        "download context"
+      ],
+      "analysis": {
+        "id": "023a0f11-4b06-4678-b47a-582002f8aa88",
+        "ioc": {
+          "value": "10.0.0.7",
+          "type": "ipv4",
+          "public": false
+        },
+        "mode": "demo",
+        "created_at": "2026-10-14T20:20:43.090838Z",
+        "results": [
+          {
+            "source": "virustotal",
+            "status": "not_found",
+            "retrieved_at": "2026-10-14T20:20:43.055433Z",
+            "evidence": [],
+            "message": "No synthetic fixture for this IOC",
+            "attempts": 0,
+            "retry_after": null,
+            "cached": false
+          },
+          {
+            "source": "abuseipdb",
+            "status": "not_found",
+            "retrieved_at": "2026-10-14T20:20:43.055433Z",
+            "evidence": [],
+            "message": "No synthetic fixture for this IOC",
+            "attempts": 0,
+            "retry_after": null,
+            "cached": false
+          },
+          {
+            "source": "otx",
+            "status": "not_found",
+            "retrieved_at": "2026-10-14T20:20:43.046780Z",
+            "evidence": [],
+            "message": "No synthetic fixture for this IOC",
+            "attempts": 0,
+            "retry_after": null,
+            "cached": false
+          }
+        ],
+        "score": {
+          "risk": null,
+          "label": "unknown",
+          "confidence": 0,
+          "coverage": 0,
+          "freshness": 0,
+          "contributions": [],
+          "methodology": "heuristic-v1; unvalidated triage aid, not a probability or verdict"
+        }
+      },
+      "disposition": "unreviewed",
+      "note": "",
+      "priority": "review",
+      "reasons": [
+        "Non-public/reserved indicator: retained for local context; external lookup blocked",
+        "Local source contains: blocked event, download context; keywords alone are not proof",
+        "Provider coverage 0%; missing sources remain a gap",
+        "Connected to 3 other case indicators by source context"
+      ],
+      "next_steps": [
+        "Identify the originating message/process and downloaded file hash using existing logs",
+        "Confirm the control blocked the event and check whether any related activity was allowed"
+      ]
+    },
+    {
+      "id": "c1f84a1e172898b74318",
+      "ioc": {
+        "value": "10.0.0.8",
+        "type": "ipv4",
+        "public": false
+      },
+      "occurrences": 1,
+      "observations": [
+        {
+          "line": 4,
+          "excerpt": "2026-10-14T10:02:00Z host=workstation-08 src=10.0.0.8 dst=203.0.113.42 action=deny download=hxxps://suspicious[.]example/login",
+          "tags": [
+            "blocked event",
+            "download context"
+          ]
+        }
+      ],
+      "tags": [
+        "blocked event",
+        "download context"
+      ],
+      "analysis": {
+        "id": "3409f7da-d558-4941-80b6-f3df899d8a6d",
+        "ioc": {
+          "value": "10.0.0.8",
+          "type": "ipv4",
+          "public": false
+        },
+        "mode": "demo",
+        "created_at": "2026-10-14T20:20:43.167315Z",
+        "results": [
+          {
+            "source": "virustotal",
+            "status": "not_found",
+            "retrieved_at": "2026-10-14T20:20:43.132503Z",
+            "evidence": [],
+            "message": "No synthetic fixture for this IOC",
+            "attempts": 0,
+            "retry_after": null,
+            "cached": false
+          },
+          {
+            "source": "abuseipdb",
+            "status": "not_found",
+            "retrieved_at": "2026-10-14T20:20:43.134502Z",
+            "evidence": [],
+            "message": "No synthetic fixture for this IOC",
+            "attempts": 0,
+            "retry_after": null,
+            "cached": false
+          },
+          {
+            "source": "otx",
+            "status": "not_found",
+            "retrieved_at": "2026-10-14T20:20:43.132503Z",
+            "evidence": [],
+            "message": "No synthetic fixture for this IOC",
+            "attempts": 0,
+            "retry_after": null,
+            "cached": false
+          }
+        ],
+        "score": {
+          "risk": null,
+          "label": "unknown",
+          "confidence": 0,
+          "coverage": 0,
+          "freshness": 0,
+          "contributions": [],
+          "methodology": "heuristic-v1; unvalidated triage aid, not a probability or verdict"
+        }
+      },
+      "disposition": "unreviewed",
+      "note": "",
+      "priority": "review",
+      "reasons": [
+        "Non-public/reserved indicator: retained for local context; external lookup blocked",
+        "Local source contains: blocked event, download context; keywords alone are not proof",
+        "Provider coverage 0%; missing sources remain a gap",
+        "Connected to 3 other case indicators by source context"
+      ],
+      "next_steps": [
+        "Identify the originating message/process and downloaded file hash using existing logs",
+        "Confirm the control blocked the event and check whether any related activity was allowed"
+      ]
+    },
+    {
+      "id": "cd372fb85148700fa880",
+      "ioc": {
+        "value": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "type": "sha256",
+        "public": true
+      },
+      "occurrences": 1,
+      "observations": [
+        {
+          "line": 3,
+          "excerpt": "2026-10-14T10:01:00Z host=workstation-07 process=powershell attachment=suspicious.example sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "tags": [
+            "download context",
+            "execution context"
+          ]
+        }
+      ],
+      "tags": [
+        "download context",
+        "execution context"
+      ],
+      "analysis": {
+        "id": "8a9a3724-dc23-4ba9-a993-ef2f1d906b6c",
+        "ioc": {
+          "value": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "type": "sha256",
+          "public": true
+        },
+        "mode": "demo",
+        "created_at": "2026-10-14T20:20:43.227003Z",
+        "results": [
+          {
+            "source": "virustotal",
+            "status": "ok",
+            "retrieved_at": "2026-10-14T20:20:43.200409Z",
+            "evidence": [
+              {
+                "source": "virustotal",
+                "metric": "detections",
+                "value": 0.0,
+                "total": 72,
+                "description": "SYNTHETIC demo evidence; not real provider intelligence",
+                "source_url": "fixture://demo/quiet",
+                "retrieved_at": "2026-10-14T20:20:43.200409Z",
+                "observed_at": "2026-10-13T20:20:43.200409Z"
+              }
+            ],
+            "message": "SYNTHETIC demo",
+            "attempts": 0,
+            "retry_after": null,
+            "cached": false
+          },
+          {
+            "source": "abuseipdb",
+            "status": "unsupported",
+            "retrieved_at": "2026-10-14T20:20:43.195874Z",
+            "evidence": [],
+            "message": "",
+            "attempts": 0,
+            "retry_after": null,
+            "cached": false
+          },
+          {
+            "source": "otx",
+            "status": "ok",
+            "retrieved_at": "2026-10-14T20:20:43.200409Z",
+            "evidence": [
+              {
+                "source": "otx",
+                "metric": "pulse_count",
+                "value": 0.0,
+                "total": null,
+                "description": "SYNTHETIC demo evidence; not real provider intelligence",
+                "source_url": "fixture://demo/quiet",
+                "retrieved_at": "2026-10-14T20:20:43.200409Z",
+                "observed_at": "2026-10-13T20:20:43.200409Z"
+              }
+            ],
+            "message": "SYNTHETIC demo",
+            "attempts": 0,
+            "retry_after": null,
+            "cached": false
+          }
+        ],
+        "score": {
+          "risk": 0,
+          "label": "low signal",
+          "confidence": 99,
+          "coverage": 100,
+          "freshness": 99,
+          "contributions": [
+            {
+              "source": "virustotal",
+              "points": 0.0,
+              "reason": "0/72 malicious engines x 60-point ceiling"
+            },
+            {
+              "source": "otx",
+              "points": 0.0,
+              "reason": "0 community pulses x 2, capped at 10"
+            }
+          ],
+          "methodology": "heuristic-v1; unvalidated triage aid, not a probability or verdict"
+        }
+      },
+      "disposition": "unreviewed",
+      "note": "",
+      "priority": "review",
+      "reasons": [
+        "Local source contains: download context, execution context; keywords alone are not proof",
+        "Available providers returned no positive signal; this does not establish safety",
+        "Connected to 1 other case indicators by source context"
+      ],
+      "next_steps": [
+        "Review the process tree and command line in endpoint telemetry; do not execute the sample",
+        "Identify the originating message/process and downloaded file hash using existing logs"
+      ]
+    },
+    {
+      "id": "232337896e547ba449a0",
+      "ioc": {
+        "value": "10.0.0.9",
+        "type": "ipv4",
+        "public": false
+      },
+      "occurrences": 1,
+      "observations": [
+        {
+          "line": 6,
+          "excerpt": "2026-10-14T10:04:00Z host=workstation-09 src=10.0.0.9 dst=2001:db8::42 action=allowed",
+          "tags": []
+        }
+      ],
+      "tags": [],
+      "analysis": {
+        "id": "80def291-c7ea-492f-b428-5ea8b9bfe702",
+        "ioc": {
+          "value": "10.0.0.9",
+          "type": "ipv4",
+          "public": false
+        },
+        "mode": "demo",
+        "created_at": "2026-10-14T20:20:43.330432Z",
+        "results": [
+          {
+            "source": "virustotal",
+            "status": "not_found",
+            "retrieved_at": "2026-10-14T20:20:43.283935Z",
+            "evidence": [],
+            "message": "No synthetic fixture for this IOC",
+            "attempts": 0,
+            "retry_after": null,
+            "cached": false
+          },
+          {
+            "source": "abuseipdb",
+            "status": "not_found",
+            "retrieved_at": "2026-10-14T20:20:43.260682Z",
+            "evidence": [],
+            "message": "No synthetic fixture for this IOC",
+            "attempts": 0,
+            "retry_after": null,
+            "cached": false
+          },
+          {
+            "source": "otx",
+            "status": "not_found",
+            "retrieved_at": "2026-10-14T20:20:43.282883Z",
+            "evidence": [],
+            "message": "No synthetic fixture for this IOC",
+            "attempts": 0,
+            "retry_after": null,
+            "cached": false
+          }
+        ],
+        "score": {
+          "risk": null,
+          "label": "unknown",
+          "confidence": 0,
+          "coverage": 0,
+          "freshness": 0,
+          "contributions": [],
+          "methodology": "heuristic-v1; unvalidated triage aid, not a probability or verdict"
+        }
+      },
+      "disposition": "unreviewed",
+      "note": "",
+      "priority": "context",
+      "reasons": [
+        "Non-public/reserved indicator: retained for local context; external lookup blocked",
+        "Provider coverage 0%; missing sources remain a gap",
+        "Connected to 1 other case indicators by source context"
+      ],
+      "next_steps": [
+        "Compare the source line with the asset owner's expected activity and record your finding"
+      ]
+    },
+    {
+      "id": "f215faf9d88b7f0a8816",
+      "ioc": {
+        "value": "d41d8cd98f00b204e9800998ecf8427e",
+        "type": "md5",
+        "public": true
+      },
+      "occurrences": 1,
+      "observations": [
+        {
+          "line": 7,
+          "excerpt": "2026-10-14T10:05:00Z host=workstation-07 file_hash=d41d8cd98f00b204e9800998ecf8427e action=allowed",
+          "tags": []
+        }
+      ],
+      "tags": [],
+      "analysis": {
+        "id": "bc32f005-5330-43a2-be65-c6957ed1cfed",
+        "ioc": {
+          "value": "d41d8cd98f00b204e9800998ecf8427e",
+          "type": "md5",
+          "public": true
+        },
+        "mode": "demo",
+        "created_at": "2026-10-14T20:20:43.466807Z",
+        "results": [
+          {
+            "source": "virustotal",
+            "status": "ok",
+            "retrieved_at": "2026-10-14T20:20:43.440300Z",
+            "evidence": [
+              {
+                "source": "virustotal",
+                "metric": "detections",
+                "value": 0.0,
+                "total": 72,
+                "description": "SYNTHETIC demo evidence; not real provider intelligence",
+                "source_url": "fixture://demo/quiet",
+                "retrieved_at": "2026-10-14T20:20:43.440300Z",
+                "observed_at": "2026-10-13T20:20:43.440300Z"
+              }
+            ],
+            "message": "SYNTHETIC demo",
+            "attempts": 0,
+            "retry_after": null,
+            "cached": false
+          },
+          {
+            "source": "abuseipdb",
+            "status": "unsupported",
+            "retrieved_at": "2026-10-14T20:20:43.434687Z",
+            "evidence": [],
+            "message": "",
+            "attempts": 0,
+            "retry_after": null,
+            "cached": false
+          },
+          {
+            "source": "otx",
+            "status": "ok",
+            "retrieved_at": "2026-10-14T20:20:43.453281Z",
+            "evidence": [
+              {
+                "source": "otx",
+                "metric": "pulse_count",
+                "value": 0.0,
+                "total": null,
+                "description": "SYNTHETIC demo evidence; not real provider intelligence",
+                "source_url": "fixture://demo/quiet",
+                "retrieved_at": "2026-10-14T20:20:43.453281Z",
+                "observed_at": "2026-10-13T20:20:43.453281Z"
+              }
+            ],
+            "message": "SYNTHETIC demo",
+            "attempts": 0,
+            "retry_after": null,
+            "cached": false
+          }
+        ],
+        "score": {
+          "risk": 0,
+          "label": "low signal",
+          "confidence": 99,
+          "coverage": 100,
+          "freshness": 99,
+          "contributions": [
+            {
+              "source": "virustotal",
+              "points": 0.0,
+              "reason": "0/72 malicious engines x 60-point ceiling"
+            },
+            {
+              "source": "otx",
+              "points": 0.0,
+              "reason": "0 community pulses x 2, capped at 10"
+            }
+          ],
+          "methodology": "heuristic-v1; unvalidated triage aid, not a probability or verdict"
+        }
+      },
+      "disposition": "unreviewed",
+      "note": "",
+      "priority": "context",
+      "reasons": [
+        "Available providers returned no positive signal; this does not establish safety"
+      ],
+      "next_steps": [
+        "Compare the source line with the asset owner's expected activity and record your finding"
+      ]
+    }
+  ],
+  "relationships": [
+    {
+      "source": "c9e87fb724774d7ec4d7",
+      "target": "dec552e3d201c2324bb5",
+      "kind": "url_host",
+      "count": 2,
+      "lines": [
+        2,
+        4
+      ]
+    },
+    {
+      "source": "130e4daba9786013f48d",
+      "target": "17af1cf3d1b5332c5334",
+      "kind": "same_line",
+      "count": 1,
+      "lines": [
+        2
+      ]
+    },
+    {
+      "source": "130e4daba9786013f48d",
+      "target": "c9e87fb724774d7ec4d7",
+      "kind": "same_line",
+      "count": 1,
+      "lines": [
+        2
+      ]
+    },
+    {
+      "source": "130e4daba9786013f48d",
+      "target": "dec552e3d201c2324bb5",
+      "kind": "same_line",
+      "count": 1,
+      "lines": [
+        2
+      ]
+    },
+    {
+      "source": "17af1cf3d1b5332c5334",
+      "target": "c9e87fb724774d7ec4d7",
+      "kind": "same_line",
+      "count": 2,
+      "lines": [
+        2,
+        4
+      ]
+    },
+    {
+      "source": "17af1cf3d1b5332c5334",
+      "target": "dec552e3d201c2324bb5",
+      "kind": "same_line",
+      "count": 2,
+      "lines": [
+        2,
+        4
+      ]
+    },
+    {
+      "source": "c9e87fb724774d7ec4d7",
+      "target": "dec552e3d201c2324bb5",
+      "kind": "same_line",
+      "count": 2,
+      "lines": [
+        2,
+        4
+      ]
+    },
+    {
+      "source": "cd372fb85148700fa880",
+      "target": "dec552e3d201c2324bb5",
+      "kind": "same_line",
+      "count": 1,
+      "lines": [
+        3
+      ]
+    },
+    {
+      "source": "17af1cf3d1b5332c5334",
+      "target": "c1f84a1e172898b74318",
+      "kind": "same_line",
+      "count": 1,
+      "lines": [
+        4
+      ]
+    },
+    {
+      "source": "c1f84a1e172898b74318",
+      "target": "c9e87fb724774d7ec4d7",
+      "kind": "same_line",
+      "count": 1,
+      "lines": [
+        4
+      ]
+    },
+    {
+      "source": "c1f84a1e172898b74318",
+      "target": "dec552e3d201c2324bb5",
+      "kind": "same_line",
+      "count": 1,
+      "lines": [
+        4
+      ]
+    },
+    {
+      "source": "232337896e547ba449a0",
+      "target": "2d5a46998b37e42f787f",
+      "kind": "same_line",
+      "count": 1,
+      "lines": [
+        6
+      ]
+    }
+  ],
+  "warnings": [
+    "Extraction and local keyword tags are heuristics; review original context. Relationships do not prove causality."
+  ],
+  "audit": [
+    {
+      "at": "2026-10-14T20:20:37.636391Z",
+      "action": "import",
+      "detail": "Local extraction only; no external queries"
+    },
+    {
+      "at": "2026-10-14T20:20:42.809026Z",
+      "action": "enrichment started",
+      "detail": "demo; 9 selected; 0 privacy skips; full URL consent: False"
+    },
+    {
+      "at": "2026-10-14T20:20:43.510599Z",
+      "action": "enrichment completed",
+      "detail": "9/9 lookups completed"
+    },
+    {
+      "at": "2026-10-14T20:21:33.273022Z",
+      "action": "review",
+      "detail": "203.0.113.42: investigate"
+    }
+  ]
+}

@@ -1,12 +1,72 @@
 # ThreatFusion
 
-**Evidence first. Explainable intelligence for security triage.**
+**Turn noisy local evidence into a traceable investigation.**
 
-A runnable Python cybersecurity portfolio project that validates indicators, gathers existing intelligence from three providers, preserves attribution and timestamps, and explains every heuristic risk contribution. Includes a responsive dashboard, REST API, CLI, SQLite cache/history, JSON/PDF reports, synthetic offline fixtures, and mocked integration tests.
+ThreatFusion is a local investigation workbench. Import logs, email text, CSV/JSON text, or IOC lists; extract and deduplicate indicators; inspect their source lines and connections; prioritize a review queue; record findings; and export a case brief. External reputation lookup is an optional step in that workflow. The app does not need provider keys to organize and investigate your own evidence.
 
 > Scores are unvalidated heuristics, not calibrated probabilities or a malicious/benign verdict. Demo evidence is entirely synthetic. Missing records and low scores do not establish safety.
 
-![ThreatFusion dashboard](examples/dashboard.png)
+![Investigation workbench](examples/investigation-workbench.png)
+
+![Evidence and next steps](examples/investigation-evidence.png)
+
+## Why use it?
+
+An isolated reputation lookup answers what a provider knows about one IOC. ThreatFusion adds your local context: **where did this indicator appear, how often, alongside what activity, which related indicators need review, and what did the analyst conclude?**
+
+For example, import a firewall/endpoint excerpt containing a repeated IP, a defanged download URL, an internal host, and a file hash. The workbench links the source events, puts repeated multi-context activity near the top of a review queue, preserves the private host locally, suggests concrete checks, and saves your finding with the evidence. You can then enrich only the public indicators you choose and export the complete investigation.
+
+## Investigation walkthrough
+
+1. Run `threatfusion serve` and open http://127.0.0.1:8000.
+2. Click **Try a fictional incident walkthrough** to learn without external calls, or import your own supported text file/paste evidence.
+3. Review the queue and open an IOC. Inspect original line excerpts, local activity tags, connected indicators, and suggested next checks.
+4. Optional: select IOCs for enrichment. A fictional case runs synthetic providers only. A real case requires live configuration; private/reserved IOCs stay local and full URLs remain blocked unless you explicitly consent.
+5. Record an evidence-backed note and choose **Investigate**, **Expected activity**, or **Escalate**. These are analyst decisions, separate from provider numbers.
+6. Export JSON, CSV, or a PDF case brief including source references, rationale, provider gaps, findings, and activity history.
+
+The original single-IOC tool remains at `/lookup`. The main page is now the case workbench.
+
+### Local import and privacy
+
+- Import is offline: no DNS resolution, target visits, external submissions, or sample execution.
+- Input is bounded to 200,000 characters, 10,000 lines, and the first 200 unique IOCs. Excess indicators are reported, not silently claimed as processed.
+- `hxxp(s)://`, `[.]`, and `(.)` are refanged only for local parsing. Original source excerpts are retained.
+- Extraction is heuristic. It recognizes supported syntactic IOC types and skips common executable/log filename suffixes, but can still miss or misclassify domain-like text. Review the source.
+- Each IOC keeps a total sighting count and up to 12 source-line excerpts. Excerpts are limited to 500 characters; retain your original input. Full raw input is not retained, but its SHA256 is saved for integrity reference.
+- Connections mean same-line co-occurrence or URL-host containment, not confirmed network communication or attribution. A URL's derived hostname is shown as a separate indicator.
+- Local tags flag words associated with authentication failure, blocked events, downloads, and execution. Repeated sightings across multiple tag types get high **review priority**; these hints do not assert maliciousness or replace provider risk scores.
+- Background enrichment processes deduplicated selections, preserves partial results, supports cancellation, and never auto-resumes on restart. Already-sent requests cannot be recalled. At most four jobs are admitted and two run concurrently per app process; durable multi-worker quota coordination remains future work.
+- Source excerpts and notes can contain sensitive information. They stay in local SQLite and exported reports. Protect these files. Deleting a case removes its case/job records; separate IOC analysis history/cache must be cleared separately.
+- CSV export neutralizes leading spreadsheet formula characters. PDFs escape markup and do not make suspicious IOCs clickable.
+
+### Case CLI
+
+```bash
+threatfusion case-import events.log --title "Workstation investigation"
+threatfusion case-list
+threatfusion case-report CASE_ID case-brief.pdf
+threatfusion case-report CASE_ID indicators.csv
+```
+
+CLI import makes no provider calls. Use the dashboard for background enrichment and analyst findings.
+
+### Case API
+
+| Method | Endpoint | Purpose |
+| --- | --- | --- |
+| POST | `/api/cases` | Import `{title, source_name, text}` locally |
+| POST | `/api/cases/demo` | Create a fictional training case |
+| GET | `/api/cases?limit=20&offset=0` | List saved case summaries |
+| GET | `/api/cases/{id}` | Full source-linked investigation |
+| PATCH | `/api/cases/{id}/indicators/{indicator_id}` | Save `{disposition, note}` |
+| POST | `/api/cases/{id}/enrich` | Start `{mode, selected, allow_url}` job; 202 |
+| GET | `/api/jobs/{id}` | Progress and partial-completion counts |
+| POST | `/api/jobs/{id}/cancel` | Stop queued/remaining work |
+| GET | `/api/cases/{id}/report?format=json|csv|pdf` | Export a case brief |
+| DELETE | `/api/cases/{id}` | Delete case and job records after cancelling active work |
+
+The existing optional API key protects these routes. Case updates use atomic SQLite transactions so enrichment cannot overwrite a saved finding. Request-body limits are enforced while streaming, including chunked requests.
 
 ## Quick start
 
@@ -154,4 +214,4 @@ MIT licensed. Built for defensive learning and portfolio demonstration.
 
 ## Remaining work
 
-The portfolio MVP is implemented. Live-provider verification, empirical score evaluation, and production deployment hardening remain open. Bulk import, richer history, and automated browser regression tests are planned enhancements. See [ROADMAP.md](ROADMAP.md) for priorities and acceptance criteria.
+The local investigation workflow is implemented. Wider live-provider verification, empirical score evaluation, production deployment hardening, and automated browser regression tests remain open. See [ROADMAP.md](ROADMAP.md) for priorities and acceptance criteria.
