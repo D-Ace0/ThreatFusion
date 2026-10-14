@@ -22,8 +22,18 @@ def pdf_report(analysis: Analysis) -> bytes:
 
     s = analysis.score
     story = [
-        paragraph("THREATFUSION / Intelligence report", "Title"),
+        paragraph(
+            "THREATFUSION / SIMULATED DEMO"
+            if analysis.mode == "demo"
+            else "THREATFUSION / Intelligence report",
+            "Title",
+        ),
         paragraph(f"{analysis.mode.upper()} | {analysis.created_at.isoformat()}"),
+        paragraph(
+            "FICTIONAL FIXTURE DATA. No live provider lookup or maliciousness verdict."
+            if analysis.mode == "demo"
+            else "Existing provider intelligence. This heuristic is not a safety verdict."
+        ),
         Spacer(1, 12),
         paragraph(analysis.ioc.value, "Heading2"),
         paragraph(f"Type: {analysis.ioc.type.value} | Analysis: {analysis.id}"),

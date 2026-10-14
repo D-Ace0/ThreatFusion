@@ -21,9 +21,14 @@ console = Console()
 def show(result):
     s = result.score
     console.print(f"[bold cyan]ThreatFusion[/] | {result.mode.upper()} | {result.id}")
+    if result.mode == "demo":
+        console.print(
+            "[bold yellow]SIMULATED DEMO: fictional fixture values, not a real provider verdict.[/]"
+        )
+    risk_title = "Simulated risk" if result.mode == "demo" else "Risk"
     console.print(result.ioc.value, markup=False)
     console.print(
-        f"Risk: {s.risk if s.risk is not None else 'Unknown'} / 100 ({s.label}) | Confidence: {s.confidence}% | Coverage: {s.coverage}% | Freshness: {s.freshness}%"
+        f"{risk_title}: {s.risk if s.risk is not None else 'Unknown'} / 100 ({s.label}) | Confidence: {s.confidence}% | Coverage: {s.coverage}% | Freshness: {s.freshness}%"
     )
     table = Table("Provider", "Status", "Cache", "Evidence")
     for r in result.results:

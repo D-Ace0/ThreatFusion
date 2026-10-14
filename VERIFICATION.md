@@ -17,7 +17,7 @@ Verified locally on **2026-10-14**, Windows, Python **3.12.14**.
 
 Examples are in `examples/`: dashboard preview, synthetic report PDF, and matching JSON.
 
-No live intelligence requests, suspicious URL submissions, sample execution, or API-key use were performed. Live adapters are verified against official route documentation and mocked responses; paid account entitlements and live provider behavior were not tested.
+The initial verification was offline. On 2026-10-14, an owner-authorized VirusTotal live lookup for public IP `8.8.8.8` succeeded and returned 0/92 malicious detections. The documentation address `203.0.113.42` remained blocked in live mode with unknown risk. No suspicious URLs were submitted and no samples were executed. Credentials are stored only in ignored local configuration. AbuseIPDB/OTX live behavior and other VirusTotal IOC types remain unverified.
 
 The installed Starlette version emits one deprecation warning about its HTTPX-based TestClient. Tests still pass. This is a test-client compatibility notice, not a failed runtime check.
 
@@ -32,3 +32,7 @@ pytest-cov 7.1.0     ruff 0.17.0          pypdf 6.20.1
 ```
 
 Heuristic scores have **not** been benchmarked, calibrated, or validated against a labeled threat dataset. Code coverage is not evidence of detection accuracy.
+
+## Demo clarity correction
+
+Demo results now display prominent fictional-data labels in the dashboard, CLI, and PDF exports; historical demo entries remain explicitly simulated when the running app is in live mode. The fictional fixture score for `203.0.113.42` is not a VirusTotal reputation claim. Rechecked all 89 mocked tests after this change: 97.30% coverage.

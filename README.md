@@ -37,6 +37,8 @@ On Windows, activation can be skipped by using `.venv\Scripts\threatfusion.exe` 
 
 ### Key-free demo
 
+**The demo score for `203.0.113.42` is fictional.** It is not its VirusTotal reputation. This address belongs to the documentation-only TEST-NET-3 range; live mode blocks it. A real VirusTotal result of 0 detections means no vendors flagged that record, not guaranteed safety. The dashboard, CLI, and reports label simulated evidence explicitly.
+
 All seven IOC types have packaged fixtures. They use documentation IP ranges, `.example` domains, and empty-file hashes. These names and hashes **do not carry real reputation claims**. Flagged, quiet, and stale profiles demonstrate scoring and missing freshness. An IOC without a fixture returns `not_found` and unknown risk. Demo ignores API keys and never constructs real providers.
 
 ## Live enrichment

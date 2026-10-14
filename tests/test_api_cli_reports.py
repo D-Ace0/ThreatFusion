@@ -12,6 +12,8 @@ def test_api_end_to_end(settings):
     with TestClient(create_app(settings)) as client:
         assert client.get("/api/health").json()["mode"] == "demo"
         assert client.get("/").status_code == 200
+        assert 'id="mode-notice"' in client.get("/").text
+        assert "SIMULATED DEMO RESULT" in client.get("/static/app.js").text
         assert "Same-origin REST explorer" in client.get("/docs").text
         assert client.get("/static/app.js").status_code == 200
         assert client.get("/openapi.json").status_code == 200
@@ -34,6 +36,7 @@ def test_api_end_to_end(settings):
         reader = PdfReader(BytesIO(pdf.content))
         text = "".join(p.extract_text() for p in reader.pages)
         assert "203.0.113.42" in text and "SYNTHETIC" in text and "unvalidated" in text
+        assert "SIMULATED DEMO" in text and "FICTIONAL FIXTURE DATA" in text
         assert client.delete("/api/history").json() == {"cleared": True}
         assert not client.get("/api/history").json()
 
@@ -70,6 +73,7 @@ def test_cli(monkeypatch, tmp_path):
     assert (tmp_path / "report.json").exists()
     pdf = runner.invoke(app, ["analyze", "203.0.113.42", "--output", str(tmp_path / "report.pdf")])
     assert pdf.exit_code == 0 and (tmp_path / "report.pdf").read_bytes().startswith(b"%PDF")
+    assert "SIMULATED DEMO" in pdf.output and "Simulated risk" in pdf.output
     assert runner.invoke(app, ["analyze", "bad"]).exit_code == 2
     assert runner.invoke(app, ["analyze", "203.0.113.42", "--output", "bad.txt"]).exit_code == 2
     assert runner.invoke(app, ["demo"]).exit_code == 0
