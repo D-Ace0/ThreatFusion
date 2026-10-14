@@ -1,0 +1,17 @@
+{
+  "notice": "Entirely synthetic fixtures; no real-world reputation claims.",
+  "profiles": {
+    "flagged": {"malicious": 48, "total": 72, "abuse": 85, "pulses": 7, "age_days": 2},
+    "quiet": {"malicious": 0, "total": 72, "abuse": 0, "pulses": 0, "age_days": 1},
+    "stale": {"malicious": 12, "total": 72, "abuse": 50, "pulses": 3, "age_days": 120}
+  },
+  "indicators": {
+    "203.0.113.42": "flagged",
+    "2001:db8::42": "stale",
+    "suspicious.example": "flagged",
+    "https://suspicious.example/login": "flagged",
+    "d41d8cd98f00b204e9800998ecf8427e": "quiet",
+    "da39a3ee5e6b4b0d3255bfef95601890afd80709": "quiet",
+    "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855": "quiet"
+  }
+}

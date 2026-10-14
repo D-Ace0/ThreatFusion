@@ -1,0 +1,100 @@
+{
+  "id": "673ea319-4428-4acf-b294-515c032dd3f6",
+  "ioc": {
+    "value": "203.0.113.42",
+    "type": "ipv4",
+    "public": false
+  },
+  "mode": "demo",
+  "created_at": "2026-10-14T19:29:58.693716Z",
+  "results": [
+    {
+      "source": "virustotal",
+      "status": "ok",
+      "retrieved_at": "2026-10-14T19:29:58.659290Z",
+      "evidence": [
+        {
+          "source": "virustotal",
+          "metric": "detections",
+          "value": 48.0,
+          "total": 72,
+          "description": "SYNTHETIC demo evidence; not real provider intelligence",
+          "source_url": "fixture://demo/flagged",
+          "retrieved_at": "2026-10-14T19:29:58.659290Z",
+          "observed_at": "2026-10-12T19:29:58.659290Z"
+        }
+      ],
+      "message": "SYNTHETIC demo",
+      "attempts": 0,
+      "retry_after": null,
+      "cached": false
+    },
+    {
+      "source": "abuseipdb",
+      "status": "ok",
+      "retrieved_at": "2026-10-14T19:29:58.660290Z",
+      "evidence": [
+        {
+          "source": "abuseipdb",
+          "metric": "abuse_confidence",
+          "value": 85.0,
+          "total": null,
+          "description": "SYNTHETIC demo evidence; not real provider intelligence",
+          "source_url": "fixture://demo/flagged",
+          "retrieved_at": "2026-10-14T19:29:58.660290Z",
+          "observed_at": "2026-10-12T19:29:58.660290Z"
+        }
+      ],
+      "message": "SYNTHETIC demo",
+      "attempts": 0,
+      "retry_after": null,
+      "cached": false
+    },
+    {
+      "source": "otx",
+      "status": "ok",
+      "retrieved_at": "2026-10-14T19:29:58.648080Z",
+      "evidence": [
+        {
+          "source": "otx",
+          "metric": "pulse_count",
+          "value": 7.0,
+          "total": null,
+          "description": "SYNTHETIC demo evidence; not real provider intelligence",
+          "source_url": "fixture://demo/flagged",
+          "retrieved_at": "2026-10-14T19:29:58.648080Z",
+          "observed_at": "2026-10-12T19:29:58.648080Z"
+        }
+      ],
+      "message": "SYNTHETIC demo",
+      "attempts": 0,
+      "retry_after": null,
+      "cached": false
+    }
+  ],
+  "score": {
+    "risk": 76,
+    "label": "high",
+    "confidence": 99,
+    "coverage": 100,
+    "freshness": 98,
+    "contributions": [
+      {
+        "source": "virustotal",
+        "points": 40.0,
+        "reason": "48/72 malicious engines x 60-point ceiling"
+      },
+      {
+        "source": "abuseipdb",
+        "points": 25.5,
+        "reason": "Provider abuse score 85/100 x 30-point ceiling"
+      },
+      {
+        "source": "otx",
+        "points": 10.0,
+        "reason": "7 community pulses x 2, capped at 10"
+      }
+    ],
+    "methodology": "heuristic-v1; unvalidated triage aid, not a probability or verdict"
+  }
+}
